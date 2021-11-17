@@ -4,18 +4,18 @@ import 'package:blog_frontend/services/networking.dart' as networking;
 import 'dart:html';
 
 // Create a Form widget.
-class CreateBlogPostScreen extends StatefulWidget {
-  const CreateBlogPostScreen({Key? key}) : super(key: key);
+class UpdateBlogPostScreen extends StatefulWidget {
+  const UpdateBlogPostScreen({Key? key}) : super(key: key);
 
   @override
-  CreateBlogPostScreenState createState() {
-    return CreateBlogPostScreenState();
+  UpdateBlogPostScreenState createState() {
+    return UpdateBlogPostScreenState();
   }
 }
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
+class UpdateBlogPostScreenState extends State<UpdateBlogPostScreen> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
@@ -36,6 +36,12 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
+
+    var routeArguments = ModalRoute.of(context)?.settings.arguments as Map;
+    blogTitleController.text = routeArguments['blog_title'];
+    blogBodyController.text = routeArguments['blog_body'];
+    print("heyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+    print(routeArguments['blog_body']);
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -50,6 +56,7 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
                 child: Container(
                   width: double.infinity,
                   child: TextFormField(
+                    // initialValue: routeArguments['blog_title'],
                     controller: blogTitleController,
                     decoration: InputDecoration(hintText: 'Blog Title'),
 
@@ -68,6 +75,7 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
                 child: Container(
                   width: double.infinity,
                   child: TextFormField(
+                    // initialValue: routeArguments['blog_body'],
                     minLines: 20,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
@@ -93,10 +101,12 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    String resBody = await networking.postBlogRequest(
-                        window.localStorage['user_id'],
-                        blogTitleController.text,
-                        blogBodyController.text);
+                    String resBody = await networking.updateBlogRequest(
+                      blogTitleController.text,
+                      blogBodyController.text,
+                      routeArguments['blog_id'],
+                      window.localStorage['user_id'],
+                    );
                     //print(resBody);
                     if (resBody != "error") {
                       //postLoginSetup(resBody);

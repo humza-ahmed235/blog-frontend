@@ -42,12 +42,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       //print("NO");
       List blogJSONList = blogsObject['blogList'];
       blogJSONList.forEach((blog) {
+        print("My man profile");
         print(blog);
         //blogList2.add(Text("YUOHOH"));
         blogsListTemp.add(BlogCard(
-            title: blog['blogtitle'],
-            body: blog['blogbody'],
-            date: blog['date']));
+          title: blog['blogtitle'],
+          body: blog['blogbody'],
+          date: blog['date'],
+          blog_id: blog['_id'],
+        ));
       });
       setState(() {
         blogsList.clear();
@@ -80,12 +83,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
 class BlogCard extends StatelessWidget {
   const BlogCard(
-      {Key? key, required this.title, required this.body, required this.date})
+      {Key? key,
+      required this.title,
+      required this.body,
+      required this.date,
+      required this.blog_id})
       : super(key: key);
 
   final String title;
   final String body;
   final String date;
+  final String blog_id;
 
   static bool isDesktop(BuildContext context) =>
       MediaQuery.of(context).size.width >= 900;
@@ -115,7 +123,7 @@ class BlogCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "Design".toUpperCase(),
+                      "Organization Name".toUpperCase(),
                       style: TextStyle(
                         color: kDarkBlackColor,
                         fontSize: 12,
@@ -169,16 +177,33 @@ class BlogCard extends StatelessWidget {
                       ),
                     ),
                     Spacer(),
-                    // IconButton(
-                    //   icon: SvgPicture.asset(
-                    //       "assets/icons/feather_thumbs-up.svg"),
-                    //   onPressed: () {},
-                    // ),
-                    // IconButton(
-                    //   icon: SvgPicture.asset(
-                    //       "assets/icons/feather_message-square.svg"),
-                    //   onPressed: () {},
-                    // ),
+                    IconButton(
+                      icon: Icon(Icons.favorite),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/update-blog-post',
+                          arguments: <String, String>{
+                            'blog_title': this.title,
+                            'blog_body': this.body,
+                            'blog_id': this.blog_id,
+                          },
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () async {
+                        var res = await deleteBlog(blog_id);
+                        print("delete response");
+                        print(res);
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                    ),
                     // IconButton(
                     //   icon:
                     //       SvgPicture.asset("assets/icons/feather_share-2.svg"),

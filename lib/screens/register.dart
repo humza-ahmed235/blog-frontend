@@ -102,7 +102,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       passwordController.text);
                   print(resBody);
                   if (resBody != "error") {
-                    Navigator.pushNamed(context, '/home');
+                    Navigator.pushNamed(context, '/profile');
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

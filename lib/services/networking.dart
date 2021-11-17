@@ -72,3 +72,88 @@ Future<String> getUserBlogsRequest(String? user_id) async {
     return "error";
   }
 }
+
+Future<String> postBlogRequest(
+    String? user_id, String blogTitle, String blogBody) async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+
+  try {
+    http.Response res = await http.post(
+      Uri.parse(baseurl + '/routes/addblogs'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: jsonEncode(<String?, String?>{
+        "user_id": user_id,
+        "blogtitle": blogTitle,
+        "blogbody": blogBody,
+        "blogtype": "Blog"
+      }),
+    );
+
+    if (res.statusCode == 200) {
+      return res.body;
+    } else {
+      return "error";
+    }
+  } catch (err) {
+    print(err);
+    return "error";
+  }
+}
+
+//
+Future<String> deleteBlog(String? blog_id) async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+  http.Response res = await http.delete(
+    Uri.parse(baseurl + '/routes/deleteblog/$blog_id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      "Access-Control-Allow-Origin": "*",
+    },
+  );
+
+  if (res.statusCode == 200) {
+    return res.body;
+  } else {
+    return "error";
+  }
+}
+
+Future<String> updateBlogRequest(
+  String blogTitle,
+  String blogBody,
+  String? blog_id,
+  String? user_id,
+) async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+
+  try {
+    http.Response res = await http.put(
+      Uri.parse(baseurl + '/routes/updateblog/$blog_id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: jsonEncode(<String?, String?>{
+        "user_id": user_id,
+        "blogtitle": blogTitle,
+        "blogbody": blogBody,
+        "blogtype": "Blog"
+      }),
+    );
+
+    if (res.statusCode == 200) {
+      return res.body;
+    } else {
+      return "error";
+    }
+  } catch (err) {
+    print(err);
+    return "error";
+  }
+}

@@ -2,6 +2,7 @@ import 'package:blog_frontend/screens/create_blog_post.dart';
 import 'package:blog_frontend/screens/home.dart';
 import 'package:blog_frontend/screens/profile.dart';
 import 'package:blog_frontend/screens/register.dart';
+import 'package:blog_frontend/screens/update_blog_post.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/screens/login.dart';
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       ),
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
       //home: LoginScreen(),
-      initialRoute: '/create-blog-post',
+      initialRoute: '/login',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/login': (context) => const LoginScreen(),
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterScreen(),
         '/profile': (context) => UserProfileScreen(),
         '/create-blog-post': (context) => CreateBlogPostScreen(),
+        '/update-blog-post': (context) => UpdateBlogPostScreen(),
       },
     );
   }
