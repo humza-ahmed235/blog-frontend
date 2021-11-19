@@ -5,6 +5,7 @@ import 'package:blog_frontend/screens/register.dart';
 import 'package:blog_frontend/screens/update_blog_post.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/screens/login.dart';
+import 'package:blog_frontend/services/auth.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,13 +35,15 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/login': (context) => const LoginScreen(),
+        '/login': (context) => isAuth() ? const LoginScreen() : LoginScreen(),
         // When navigating to the "/second" route, build the SecondScreen widget.
-        '/home': (context) => MyHomePage(),
-        '/register': (context) => RegisterScreen(),
-        '/profile': (context) => UserProfileScreen(),
-        '/create-blog-post': (context) => CreateBlogPostScreen(),
-        '/update-blog-post': (context) => UpdateBlogPostScreen(),
+        '/home': (context) => isAuth() ? MyHomePage() : LoginScreen(),
+        '/register': (context) => isAuth() ? RegisterScreen() : LoginScreen(),
+        '/profile': (context) => isAuth() ? UserProfileScreen() : LoginScreen(),
+        '/create-blog-post': (context) =>
+            isAuth() ? CreateBlogPostScreen() : LoginScreen(),
+        '/update-blog-post': (context) =>
+            isAuth() ? UpdateBlogPostScreen() : LoginScreen(),
       },
     );
   }
