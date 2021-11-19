@@ -21,6 +21,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   List<Widget> blogsList = [Text("Loading")];
   var blogsObject;
 
+  void callbackUpdateBlogList(List<Widget> blogsListTemp) {
+    setState(() {
+      blogsList = blogsListTemp;
+    });
+  }
+
   @override
   void initState() {
     // getBlogsObject().then((blogsObject) {
@@ -38,28 +44,34 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     //   }); //set
     // });
 
-    getBlogsObject().then((blogsObject) {
-      List<Widget> blogsListTemp = [];
+    // getBlogsObject().then((blogsObject) {
+    //   List<Widget> blogsListTemp = [];
+    //
+    //   //print("NO");
+    //   List blogJSONList = blogsObject['blogList'];
+    //   blogJSONList.forEach((blog) {
+    //     print("My man profile");
+    //     print(blog);
+    //     //blogList2.add(Text("YUOHOH"));
+    //     blogsListTemp.add(BlogCard(
+    //       title: blog['blogtitle'],
+    //       body: blog['blogbody'],
+    //       date: blog['date'],
+    //       blog_id: blog['_id'],
+    //     ));
+    //   });
+    //   setState(() {
+    //     blogsList.clear();
+    //     blogsList = blogsListTemp;
+    //   });
+    // });
 
-      //print("NO");
-      List blogJSONList = blogsObject['blogList'];
-      blogJSONList.forEach((blog) {
-        print("My man profile");
-        print(blog);
-        //blogList2.add(Text("YUOHOH"));
-        blogsListTemp.add(BlogCard(
-          title: blog['blogtitle'],
-          body: blog['blogbody'],
-          date: blog['date'],
-          blog_id: blog['_id'],
-        ));
-      });
+    generateBlogsList(callbackUpdateBlogList).then((blogsListTemp) {
       setState(() {
         blogsList.clear();
         blogsList = blogsListTemp;
       });
     });
-
     super.initState();
   }
 
@@ -92,13 +104,15 @@ class BlogCard extends StatelessWidget {
       required this.title,
       required this.body,
       required this.date,
-      required this.blog_id})
+      required this.blog_id,
+      required this.callbackUpdateBlogList})
       : super(key: key);
 
   final String title;
   final String body;
   final String date;
   final String blog_id;
+  final Function callbackUpdateBlogList;
 
   static bool isDesktop(BuildContext context) =>
       MediaQuery.of(context).size.width >= 900;
@@ -206,7 +220,11 @@ class BlogCard extends StatelessWidget {
                         var res = await deleteBlog(blog_id);
                         print("delete response");
                         print(res);
-                        Navigator.pushNamed(context, '/profile');
+                        generateBlogsList(callbackUpdateBlogList).then(
+                            (blogsListTemp) =>
+                                callbackUpdateBlogList(blogsListTemp));
+                        // callbackUpdateBlogList()
+                        //Navigator.pushNamed(context, '/profile');
                       },
                     ),
                     // IconButton(
