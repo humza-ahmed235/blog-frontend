@@ -217,14 +217,43 @@ class BlogCard extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () async {
-                        var res = await deleteBlog(blog_id);
-                        print("delete response");
-                        print(res);
-                        generateBlogsList(callbackUpdateBlogList).then(
-                            (blogsListTemp) =>
-                                callbackUpdateBlogList(blogsListTemp));
-                        // callbackUpdateBlogList()
-                        //Navigator.pushNamed(context, '/profile');
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Confirm Delete Blog'),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: const <Widget>[
+                                    Text(
+                                        'Are you sure you want to delete this blog?'),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Delete'),
+                                  onPressed: () async {
+                                    var res = await deleteBlog(blog_id);
+                                    print(res);
+                                    generateBlogsList(callbackUpdateBlogList)
+                                        .then((blogsListTemp) =>
+                                            callbackUpdateBlogList(
+                                                blogsListTemp));
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text('Cancel'),
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                     // IconButton(
