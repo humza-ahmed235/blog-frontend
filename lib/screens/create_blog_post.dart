@@ -1,3 +1,4 @@
+import 'package:blog_frontend/components/my_appbar.dart';
 import 'package:blog_frontend/services/procedures.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/services/networking.dart' as networking;
@@ -37,10 +38,11 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Scaffold(
+      appBar: generateAppBar("Create Blog Post", context),
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(80, 0, 80, 0),
+          padding: EdgeInsets.fromLTRB(80, 20, 80, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +53,8 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
                   width: double.infinity,
                   child: TextFormField(
                     controller: blogTitleController,
-                    decoration: InputDecoration(hintText: 'Blog Title'),
+                    decoration: InputDecoration(
+                        hintText: 'Blog Title', border: OutlineInputBorder()),
 
                     // The validator receives the text that the user has entered.
                     validator: (value) {

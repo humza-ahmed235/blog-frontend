@@ -9,7 +9,8 @@ void postLoginSetup(String resBody) {
   print(resObject.runtimeType);
 
   window.localStorage['user_id'] = resObject['user_id'];
-  window.localStorage['token'] = resObject['user_id'];
+  window.localStorage['token'] = resObject['token'];
+  window.localStorage['name'] = resObject['name'];
 }
 
 // getBlogsObject() async {

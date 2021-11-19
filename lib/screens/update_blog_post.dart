@@ -2,6 +2,7 @@ import 'package:blog_frontend/services/procedures.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/services/networking.dart' as networking;
 import 'dart:html';
+import 'package:blog_frontend/components/my_appbar.dart';
 
 // Create a Form widget.
 class UpdateBlogPostScreen extends StatefulWidget {
@@ -43,10 +44,11 @@ class UpdateBlogPostScreenState extends State<UpdateBlogPostScreen> {
     print("heyyyyyyyyyyyyyyyyyyyyyyyyyyy");
     print(routeArguments['blog_body']);
     return Scaffold(
+      appBar: generateAppBar("Update Blog Post", context),
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(80, 0, 80, 0),
+          padding: EdgeInsets.fromLTRB(80, 20, 80, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +60,8 @@ class UpdateBlogPostScreenState extends State<UpdateBlogPostScreen> {
                   child: TextFormField(
                     // initialValue: routeArguments['blog_title'],
                     controller: blogTitleController,
-                    decoration: InputDecoration(hintText: 'Blog Title'),
+                    decoration: InputDecoration(
+                        hintText: 'Blog Title', border: OutlineInputBorder()),
 
                     // The validator receives the text that the user has entered.
                     validator: (value) {
@@ -114,7 +117,8 @@ class UpdateBlogPostScreenState extends State<UpdateBlogPostScreen> {
                       Navigator.pushNamed(context, '/profile');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Blog post unsuccessful')),
+                        const SnackBar(
+                            content: Text('Blog update unsuccessful')),
                       );
                     }
 

@@ -105,6 +105,16 @@ class LoginScreenState extends State<LoginScreen> {
                 child: const Text('Log in'),
               ),
             ),
+            InkWell(
+              child: Text(
+                "Don't have an account? Click here to register!",
+                style: TextStyle(
+                    color: Colors.grey[800], fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/register');
+              },
+            )
           ],
         ),
       ),

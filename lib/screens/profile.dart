@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:blog_frontend/components/my_appbar.dart';
 import 'package:blog_frontend/constants.dart';
 import 'package:blog_frontend/services/networking.dart';
 import 'package:blog_frontend/services/procedures.dart';
 import 'package:flutter/material.dart';
+import 'dart:html';
 //import 'package:flutter_svg/flutter_svg.dart';
 
 import 'dart:html';
@@ -65,6 +67,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     print("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>....");
     return Scaffold(
+      appBar: generateAppBar(
+          "Profile Page - ${window.localStorage['name']}", context,
+          showBackButton: false),
       body: Padding(
         padding: EdgeInsets.fromLTRB(80, 40, 80, 40),
         child: ListView(

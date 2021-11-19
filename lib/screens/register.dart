@@ -102,7 +102,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       passwordController.text);
                   print(resBody);
                   if (resBody != "error") {
-                    Navigator.pushNamed(context, '/profile');
+                    Navigator.pushNamed(context, '/login');
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -123,6 +123,16 @@ class RegisterScreenState extends State<RegisterScreen> {
                 child: const Text('Register'),
               ),
             ),
+            InkWell(
+              child: Text(
+                "Already have an account? Click here to sign in!",
+                style: TextStyle(
+                    color: Colors.grey[800], fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/login');
+              },
+            )
           ],
         ),
       ),
