@@ -65,8 +65,9 @@ Future<String> getUserBlogsRequest(String? user_id) async {
       "Access-Control-Allow-Origin": "*",
     },
   );
+  print(res.body);
 
-  if (res.statusCode == 200) {
+  if (res.statusCode == 200 || res.statusCode == 400) {
     return res.body;
   } else {
     return "error";
@@ -154,6 +155,49 @@ Future<String> updateBlogRequest(
     }
   } catch (err) {
     print(err);
+    return "error";
+  }
+}
+
+Future<String> likeRequest(String? user_id, String? blog_id) async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+
+  try {
+    http.Response res = await http.put(
+      Uri.parse(baseurl + '/routes/updatelikes/$blog_id/$user_id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+      },
+    );
+
+    if (res.statusCode == 200) {
+      return res.body;
+    } else {
+      return "error";
+    }
+  } catch (err) {
+    print(err);
+    return "error";
+  }
+}
+
+Future<String> getBlog(String? blog_id) async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+  http.Response res = await http.get(
+    Uri.parse(baseurl + '/routes/blog/$blog_id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      "Access-Control-Allow-Origin": "*",
+    },
+  );
+  print(res.body);
+
+  if (res.statusCode == 200 || res.statusCode == 400) {
+    return res.body;
+  } else {
     return "error";
   }
 }

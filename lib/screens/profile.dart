@@ -65,13 +65,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     //     blogsList = blogsListTemp;
     //   });
     // });
-
+    print("1");
     generateBlogsList(callbackUpdateBlogList).then((blogsListTemp) {
       setState(() {
         blogsList.clear();
         blogsList = blogsListTemp;
       });
     });
+    print("2");
     super.initState();
   }
 
@@ -98,13 +99,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 }
 
-class BlogCard extends StatelessWidget {
-  const BlogCard(
+class BlogCard extends StatefulWidget {
+  BlogCard(
       {Key? key,
       required this.title,
       required this.body,
       required this.date,
       required this.blog_id,
+      required this.likes,
       required this.callbackUpdateBlogList})
       : super(key: key);
 
@@ -113,9 +115,36 @@ class BlogCard extends StatelessWidget {
   final String date;
   final String blog_id;
   final Function callbackUpdateBlogList;
+  String likes;
+  IconData likeIcon = Icons.favorite_border;
 
-  static bool isDesktop(BuildContext context) =>
+  @override
+  _BlogCardState createState() => _BlogCardState();
+
+  bool isDesktop(BuildContext context) =>
       MediaQuery.of(context).size.width >= 900;
+}
+
+class _BlogCardState extends State<BlogCard> {
+  @override
+  void initState() {
+    print("a1");
+    getBlog(widget.blog_id).then((resBody) {
+      print("a3");
+      IconData newIcon = Icons.favorite_border;
+      //print()
+      if (jsonDecode(resBody)['data']['likes']['userlist']
+          .contains(window.localStorage['user_id'])) {
+        newIcon = Icons.favorite;
+      } else {
+        newIcon = Icons.favorite_border;
+      }
+      print("a4");
+    });
+
+    print("a2");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +180,7 @@ class BlogCard extends StatelessWidget {
                     ),
                     SizedBox(width: kDefaultPadding),
                     Text(
-                      date,
+                      widget.date,
                       style: Theme.of(context).textTheme.caption,
                     ),
                   ],
@@ -160,11 +189,11 @@ class BlogCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: kDefaultPadding),
                   child: Text(
-                    title,
+                    widget.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: isDesktop(context) ? 32 : 24,
+                      fontSize: widget.isDesktop(context) ? 32 : 24,
                       fontFamily: "Raleway",
                       color: kDarkBlackColor,
                       height: 1.3,
@@ -173,7 +202,7 @@ class BlogCard extends StatelessWidget {
                   ),
                 ),
                 SelectableText(
-                  body,
+                  widget.body,
                   // maxLines: 4,
                   style: TextStyle(height: 1.5),
                 ),
@@ -197,9 +226,30 @@ class BlogCard extends StatelessWidget {
                     ),
                     Spacer(),
                     IconButton(
-                      icon: Icon(Icons.favorite),
-                      onPressed: () {},
+                      icon: Icon(widget.likeIcon),
+                      onPressed: () async {
+                        print("a");
+                        String resBody = await likeRequest(
+                            window.localStorage['user_id'], widget.blog_id);
+                        print("b");
+                        print(resBody);
+                        String likes = jsonDecode(resBody)['data']['Likes']
+                                ['count']
+                            .toString();
+                        IconData newIcon = Icons.favorite_border;
+                        if (jsonDecode(resBody)['data']['Likes']['userlist']
+                            .contains(window.localStorage['user_id'])) {
+                          newIcon = Icons.favorite;
+                        } else {
+                          newIcon = Icons.favorite_border;
+                        }
+                        setState(() {
+                          widget.likes = likes;
+                          widget.likeIcon = newIcon;
+                        });
+                      },
                     ),
+                    Text(widget.likes),
                     IconButton(
                       icon: Icon(Icons.edit),
                       onPressed: () {
@@ -207,9 +257,9 @@ class BlogCard extends StatelessWidget {
                           context,
                           '/update-blog-post',
                           arguments: <String, String>{
-                            'blog_title': this.title,
-                            'blog_body': this.body,
-                            'blog_id': this.blog_id,
+                            'blog_title': widget.title,
+                            'blog_body': widget.body,
+                            'blog_id': widget.blog_id,
                           },
                         );
                       },
@@ -235,11 +285,12 @@ class BlogCard extends StatelessWidget {
                                 TextButton(
                                   child: const Text('Delete'),
                                   onPressed: () async {
-                                    var res = await deleteBlog(blog_id);
+                                    var res = await deleteBlog(widget.blog_id);
                                     print(res);
-                                    generateBlogsList(callbackUpdateBlogList)
+                                    generateBlogsList(
+                                            widget.callbackUpdateBlogList)
                                         .then((blogsListTemp) =>
-                                            callbackUpdateBlogList(
+                                            widget.callbackUpdateBlogList(
                                                 blogsListTemp));
                                     Navigator.of(context).pop();
                                   },

@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => isAuth() ? const LoginScreen() : LoginScreen(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/home': (context) => isAuth() ? MyHomePage() : LoginScreen(),
-        '/register': (context) => isAuth() ? RegisterScreen() : LoginScreen(),
+        '/register': (context) => RegisterScreen(),
         '/profile': (context) => isAuth() ? UserProfileScreen() : LoginScreen(),
         '/create-blog-post': (context) =>
             isAuth() ? CreateBlogPostScreen() : LoginScreen(),
