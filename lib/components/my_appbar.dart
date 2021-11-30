@@ -1,3 +1,4 @@
+import 'package:blog_frontend/services/procedures.dart';
 import 'package:flutter/material.dart';
 import 'dart:html';
 
@@ -14,8 +15,7 @@ AppBar generateAppBar(
         child: ElevatedButton(
           child: Text("Log out"),
           onPressed: () {
-            window.localStorage.clear();
-            Navigator.pushNamed(context, '/login');
+            logoutProcedure();
           },
         ),
       )

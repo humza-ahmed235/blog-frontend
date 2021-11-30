@@ -1,5 +1,8 @@
+import 'package:blog_frontend/services/procedures.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:html';
+import 'package:blog_frontend/main.dart';
 
 const baseurl = 'https://blog-backend-web.herokuapp.com';
 
@@ -63,11 +66,17 @@ Future<String> getUserBlogsRequest(String? user_id) async {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       "Access-Control-Allow-Origin": "*",
+      'Authorization': 'Bearer ${window.localStorage['token']}',
     },
   );
   print(res.body);
 
   if (res.statusCode == 200 || res.statusCode == 400) {
+    return res.body;
+  }
+
+  if (res.statusCode == 401) {
+    logoutProcedure();
     return res.body;
   } else {
     return "error";
@@ -85,6 +94,7 @@ Future<String> postBlogRequest(
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         "Access-Control-Allow-Origin": "*",
+        'Authorization': 'Bearer ${window.localStorage['token']}',
       },
       body: jsonEncode(<String?, String?>{
         "user_id": user_id,
@@ -95,6 +105,9 @@ Future<String> postBlogRequest(
     );
 
     if (res.statusCode == 200) {
+      return res.body;
+    } else if (res.statusCode == 401) {
+      logoutProcedure();
       return res.body;
     } else {
       return "error";
@@ -114,10 +127,14 @@ Future<String> deleteBlog(String? blog_id) async {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       "Access-Control-Allow-Origin": "*",
+      'Authorization': 'Bearer ${window.localStorage['token']}',
     },
   );
 
   if (res.statusCode == 200) {
+    return res.body;
+  } else if (res.statusCode == 401) {
+    logoutProcedure();
     return res.body;
   } else {
     return "error";
@@ -139,6 +156,7 @@ Future<String> updateBlogRequest(
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         "Access-Control-Allow-Origin": "*",
+        'Authorization': 'Bearer ${window.localStorage['token']}',
       },
       body: jsonEncode(<String?, String?>{
         "user_id": user_id,
@@ -149,6 +167,9 @@ Future<String> updateBlogRequest(
     );
 
     if (res.statusCode == 200) {
+      return res.body;
+    } else if (res.statusCode == 401) {
+      logoutProcedure();
       return res.body;
     } else {
       return "error";
@@ -169,10 +190,14 @@ Future<String> likeRequest(String? user_id, String? blog_id) async {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         "Access-Control-Allow-Origin": "*",
+        'Authorization': 'Bearer ${window.localStorage['token']}',
       },
     );
 
     if (res.statusCode == 200) {
+      return res.body;
+    } else if (res.statusCode == 401) {
+      logoutProcedure();
       return res.body;
     } else {
       return "error";
@@ -191,11 +216,15 @@ Future<String> getBlog(String? blog_id) async {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       "Access-Control-Allow-Origin": "*",
+      'Authorization': 'Bearer ${window.localStorage['token']}',
     },
   );
   print(res.body);
 
   if (res.statusCode == 200 || res.statusCode == 400) {
+    return res.body;
+  } else if (res.statusCode == 401) {
+    logoutProcedure();
     return res.body;
   } else {
     return "error";

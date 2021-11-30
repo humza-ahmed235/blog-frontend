@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:blog_frontend/screens/login.dart';
 import 'package:blog_frontend/services/auth.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 void main() {
   runApp(MyApp());
 }
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Blog',
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
@@ -35,7 +37,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/login': (context) => isAuth() ? const LoginScreen() : LoginScreen(),
+        '/login': (context) =>
+            isAuth() ? const UserProfileScreen() : LoginScreen(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/home': (context) => isAuth() ? MyHomePage() : LoginScreen(),
         '/register': (context) => RegisterScreen(),

@@ -53,6 +53,13 @@ class LoginScreenState extends State<LoginScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
                   }
+
+                  if (!RegExp(
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                      .hasMatch(value)) {
+                    return "Invalid Email";
+                  }
+
                   return null;
                 },
               ),
@@ -69,6 +76,7 @@ class LoginScreenState extends State<LoginScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
                   }
+
                   return null;
                 },
               ),
@@ -80,20 +88,21 @@ class LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  String resBody = await networking.loginRequest(
-                      emailController.text, passwordController.text);
-                  print(resBody);
-                  if (resBody != "error") {
-                    postLoginSetup(resBody);
-                    Navigator.pushNamed(context, '/profile');
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Login Unsuccessful')),
-                    );
-                  }
-
                   // Validate returns true if the form is valid, or false otherwise.
                   if (_formKey.currentState!.validate()) {
+                    String resBody = await networking.loginRequest(
+                        emailController.text, passwordController.text);
+                    print(resBody);
+                    print("HELLO");
+                    if (resBody != "error") {
+                      postLoginSetup(resBody);
+                      Navigator.pushNamed(context, '/profile');
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Login Unsuccessful')),
+                      );
+                    }
+
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
                     // ScaffoldMessenger.of(context).showSnackBar(

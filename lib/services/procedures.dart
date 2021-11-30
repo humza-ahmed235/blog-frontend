@@ -1,19 +1,18 @@
 import 'dart:convert';
 import 'dart:html';
-
+import 'package:blog_frontend/main.dart';
 import 'package:blog_frontend/services/networking.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/screens/profile.dart';
 
 void postLoginSetup(String resBody) {
   var resObject = jsonDecode(resBody);
-  print("Yo below");
+
   print(resObject.runtimeType);
 
   window.localStorage['user_id'] = resObject['data']['user_id'];
   window.localStorage['token'] = resObject['data']['token'];
   window.localStorage['name'] = resObject['data']['name'];
-  print("Hello");
 }
 
 // getBlogsObject() async {
@@ -24,26 +23,18 @@ void postLoginSetup(String resBody) {
 // }
 
 Future generateBlogsList(Function callbackUpdateBlogList) async {
-  print("3");
   var blogJsonString =
       await getUserBlogsRequest(window.localStorage['user_id']);
   //print(blogJsonString);
-  print("4");
   print(blogJsonString);
   var blogsObject = jsonDecode(blogJsonString);
 
-  print("5");
   List<Widget> blogsListTemp = [];
 
-  //print("NO");
   List blogJSONList = blogsObject['data']['blogList'];
   print(blogJSONList);
-  // if (blogJSONList.isEmpty) {
-  //   print(6);
-  //   return [];
-  // }
+
   blogJSONList.forEach((blog) {
-    print("My man profile");
     print(blog);
     //blogList2.add(Text("YUOHOH"));
     blogsListTemp.add(BlogCard(
@@ -57,4 +48,9 @@ Future generateBlogsList(Function callbackUpdateBlogList) async {
   });
 
   return blogsListTemp;
+}
+
+logoutProcedure() {
+  window.localStorage.clear();
+  navigatorKey.currentState?.pushNamed('/login');
 }
