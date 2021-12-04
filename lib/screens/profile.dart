@@ -10,6 +10,8 @@ import 'dart:html';
 
 import 'dart:html';
 
+import 'package:intl/intl.dart';
+
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
 
@@ -131,13 +133,18 @@ class _BlogCardState extends State<BlogCard> {
     print("a1");
     getBlog(widget.blog_id).then((resBody) {
       print("a3");
-      IconData newIcon = Icons.favorite_border;
+      //IconData newIcon = Icons.favorite_border;
       //print()
       if (jsonDecode(resBody)['data']['likes']['userlist']
           .contains(window.localStorage['user_id'])) {
-        newIcon = Icons.favorite;
+        //newIcon = Icons.favorite;
+        setState(() {
+          widget.likeIcon = Icons.favorite;
+        });
       } else {
-        newIcon = Icons.favorite_border;
+        setState(() {
+          widget.likeIcon = Icons.favorite_border;
+        });
       }
       print("a4");
     });
@@ -180,7 +187,8 @@ class _BlogCardState extends State<BlogCard> {
                     ),
                     SizedBox(width: kDefaultPadding),
                     Text(
-                      widget.date,
+                      DateFormat("dd-MM-yyyy")
+                          .format(DateTime.parse(widget.date)),
                       style: Theme.of(context).textTheme.caption,
                     ),
                   ],
