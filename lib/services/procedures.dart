@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:html';
+import 'package:blog_frontend/components/user_card.dart';
 import 'package:blog_frontend/main.dart';
 import 'package:blog_frontend/services/networking.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,39 @@ Future generateBlogsList(Function callbackUpdateBlogList) async {
   });
 
   return blogsListTemp;
+}
+
+Future generateUsersList(Function callbackUpdateUsersList) async {
+  var blogJsonString = await getAllUsersRequest();
+  //print(blogJsonString);
+  print(blogJsonString);
+  var usersObject = jsonDecode(blogJsonString);
+
+  List<Widget> usersListTemp = [];
+
+  List blogJSONList = usersObject['data']['Users']['userList'];
+  print(blogJSONList);
+  usersListTemp.add(UserCard(
+      name: "Name",
+      email: "Email",
+      date: "Date Created",
+      user_id: "",
+      style: TextStyle(fontWeight: FontWeight.bold),
+      showButton: false,
+      callbackUpdateUsersList: callbackUpdateUsersList));
+  blogJSONList.forEach((user) {
+    print(user);
+    //blogList2.add(Text("YUOHOH"));
+    usersListTemp.add(UserCard(
+      name: user['name'],
+      email: user['email'],
+      date: user['date'],
+      user_id: user['_id'],
+      callbackUpdateUsersList: callbackUpdateUsersList,
+    ));
+  });
+
+  return usersListTemp;
 }
 
 logoutProcedure() {

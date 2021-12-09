@@ -3,6 +3,7 @@ import 'package:blog_frontend/screens/home.dart';
 import 'package:blog_frontend/screens/profile.dart';
 import 'package:blog_frontend/screens/register.dart';
 import 'package:blog_frontend/screens/update_blog_post.dart';
+import 'package:blog_frontend/screens/user_management.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/screens/login.dart';
 import 'package:blog_frontend/services/auth.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
             isAuth() ? CreateBlogPostScreen() : LoginScreen(),
         '/update-blog-post': (context) =>
             isAuth() ? UpdateBlogPostScreen() : LoginScreen(),
+        '/user-management': (context) => UserManagementScreen()
       },
     );
   }

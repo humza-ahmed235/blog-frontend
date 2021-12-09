@@ -142,6 +142,28 @@ Future<String> deleteBlog(String? blog_id) async {
   }
 }
 
+Future<String> deleteUser(String? user_id) async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+  http.Response res = await http.delete(
+    Uri.parse(baseurl + '/routes/deleteuser/$user_id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      "Access-Control-Allow-Origin": "*",
+      'Authorization': 'Bearer ${window.localStorage['token']}',
+    },
+  );
+
+  if (res.statusCode == 200) {
+    return res.body;
+  } else if (res.statusCode == 401) {
+    logoutProcedure();
+    return res.body;
+  } else {
+    return "error";
+  }
+}
+
 Future<String> updateBlogRequest(
   String blogTitle,
   String blogBody,
@@ -225,6 +247,31 @@ Future<String> getBlog(String? blog_id) async {
   if (res.statusCode == 200 || res.statusCode == 400) {
     return res.body;
   } else if (res.statusCode == 401) {
+    logoutProcedure();
+    return res.body;
+  } else {
+    return "error";
+  }
+}
+
+Future<String> getAllUsersRequest() async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+  http.Response res = await http.get(
+    Uri.parse(baseurl + '/routes/SuperAdmin/allUsers'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      "Access-Control-Allow-Origin": "*",
+      'Authorization': 'Bearer ${window.localStorage['token']}',
+    },
+  );
+  print(res.body);
+
+  if (res.statusCode == 200 || res.statusCode == 400) {
+    return res.body;
+  }
+
+  if (res.statusCode == 401) {
     logoutProcedure();
     return res.body;
   } else {
