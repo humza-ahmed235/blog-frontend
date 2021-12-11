@@ -59,11 +59,12 @@ Future<String> registerRequest(
   }
 }
 
-Future<String> getUserBlogsRequest(String? user_id) async {
+Future<String> getUserBlogsRequest(String? user_id,
+    {required int blogsPerPage, required int page}) async {
   //print("yo2");
   //'http://192.168.18.60:5000/';
   http.Response res = await http.get(
-    Uri.parse(baseurl + '/routes/getblogs/$user_id'),
+    Uri.parse(baseurl + '/routes/getblogs/$user_id/$blogsPerPage/$page'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       "Access-Control-Allow-Origin": "*",
