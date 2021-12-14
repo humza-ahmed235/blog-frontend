@@ -11,20 +11,17 @@ class UserManagementScreen extends StatefulWidget {
 
 class _UserManagementScreenState extends State<UserManagementScreen> {
   List<Widget> usersList = [Text("Loading")];
-  void callbackUpdateUsersList(List<Widget> usersListTemp) {
+  Widget pageList = Text("Loading");
+  void callbackUpdateUsersList(List<Widget> usersListTemp, Widget pageList) {
     setState(() {
-      usersList = usersListTemp;
+      this.usersList = usersListTemp;
+      this.pageList = pageList;
     });
   }
 
   @override
   void initState() {
-    generateUsersList(callbackUpdateUsersList).then((usersListTemp) {
-      setState(() {
-        usersList.clear();
-        usersList = usersListTemp;
-      });
-    });
+    generateUsersList(callbackUpdateUsersList, usersPerPage: 10, page: 1);
     super.initState();
   }
 
@@ -32,12 +29,18 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: generateAppBar("User Management", context),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(80, 40, 80, 40),
-        child: ListView(
-          children: usersList,
+      body: Column(children: [
+        Expanded(
+          flex: 9,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(80, 40, 80, 40),
+            child: ListView(
+              children: usersList,
+            ),
+          ),
         ),
-      ),
+        Expanded(flex: 1, child: pageList)
+      ]),
     );
   }
 }

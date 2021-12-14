@@ -21,5 +21,6 @@ AppBar generateAppBar(
       )
     ],
     title: Text(title),
+    centerTitle: true,
   );
 }

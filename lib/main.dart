@@ -1,6 +1,7 @@
 import 'package:blog_frontend/screens/create_blog_post.dart';
 import 'package:blog_frontend/screens/home.dart';
 import 'package:blog_frontend/screens/profile.dart';
+import 'package:blog_frontend/screens/user_blogs.dart';
 import 'package:blog_frontend/screens/register.dart';
 import 'package:blog_frontend/screens/update_blog_post.dart';
 import 'package:blog_frontend/screens/user_management.dart';
@@ -38,17 +39,18 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/login': (context) =>
-            isAuth() ? const UserProfileScreen() : LoginScreen(),
+        '/login': (context) => isAuth() ? const ProfileScreen() : LoginScreen(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/home': (context) => isAuth() ? MyHomePage() : LoginScreen(),
         '/register': (context) => RegisterScreen(),
-        '/profile': (context) => isAuth() ? UserProfileScreen() : LoginScreen(),
+        '/my-blogs': (context) => isAuth() ? UserBlogsScreen() : LoginScreen(),
+        '/profile': (context) => isAuth() ? ProfileScreen() : LoginScreen(),
         '/create-blog-post': (context) =>
             isAuth() ? CreateBlogPostScreen() : LoginScreen(),
         '/update-blog-post': (context) =>
             isAuth() ? UpdateBlogPostScreen() : LoginScreen(),
-        '/user-management': (context) => UserManagementScreen()
+        '/admin/user-management': (context) =>
+            isAuth(admin: true) ? UserManagementScreen() : MyHomePage(),
       },
     );
   }

@@ -255,11 +255,37 @@ Future<String> getBlog(String? blog_id) async {
   }
 }
 
-Future<String> getAllUsersRequest() async {
+Future<String> getAllUsersRequest(
+    {required int usersPerPage, required int page}) async {
   //print("yo2");
   //'http://192.168.18.60:5000/';
   http.Response res = await http.get(
-    Uri.parse(baseurl + '/routes/SuperAdmin/allUsers'),
+    Uri.parse(baseurl + '/routes/SuperAdmin/allUsers/$usersPerPage/$page'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      "Access-Control-Allow-Origin": "*",
+      'Authorization': 'Bearer ${window.localStorage['token']}',
+    },
+  );
+  print(res.body);
+
+  if (res.statusCode == 200 || res.statusCode == 400) {
+    return res.body;
+  }
+
+  if (res.statusCode == 401) {
+    logoutProcedure();
+    return res.body;
+  } else {
+    return "error";
+  }
+}
+
+Future<String> getUserRequest() async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+  http.Response res = await http.get(
+    Uri.parse(baseurl + '/routes/user/${window.localStorage['user_id']}'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       "Access-Control-Allow-Origin": "*",

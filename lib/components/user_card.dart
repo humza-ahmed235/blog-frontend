@@ -12,12 +12,16 @@ class UserCard extends StatelessWidget {
       this.style = const TextStyle(),
       this.showButton = true,
       required this.user_id,
+      required this.usersPerPage,
+      required this.page,
       required this.callbackUpdateUsersList})
       : super(key: key);
   final String name;
   final String email;
   final String date;
   final String user_id;
+  final int usersPerPage;
+  final int page;
   final TextStyle style;
   final bool showButton;
   final Function callbackUpdateUsersList;
@@ -57,9 +61,8 @@ class UserCard extends StatelessWidget {
                         onPressed: () async {
                           var res = await deleteUser(this.user_id);
                           print(res);
-                          generateUsersList(callbackUpdateUsersList).then(
-                              (usersListTemp) =>
-                                  callbackUpdateUsersList(usersListTemp));
+                          generateUsersList(callbackUpdateUsersList,
+                              usersPerPage: this.usersPerPage, page: this.page);
                           Navigator.of(context).pop();
                         },
                       ),

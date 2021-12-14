@@ -1,111 +1,100 @@
 import 'dart:convert';
 
 import 'package:blog_frontend/components/my_appbar.dart';
-import 'package:blog_frontend/components/page_list.dart';
-import 'package:blog_frontend/constants.dart';
 import 'package:blog_frontend/services/networking.dart';
-import 'package:blog_frontend/services/procedures.dart';
 import 'package:flutter/material.dart';
-import 'dart:html';
-//import 'package:flutter_svg/flutter_svg.dart';
 
-import 'dart:html';
-
-import 'package:intl/intl.dart';
-
-class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
-  List<Widget> blogsList = [Text("Loading")];
-  //List<Widget> pageList = [Text("Loading")];
-
-  Widget pageList = Text("Loading");
-  var blogsObject;
-
-  void callbackUpdateBlogList(List<Widget> blogsListTemp, Widget pageList) {
-    setState(() {
-      blogsList.clear();
-      this.blogsList = blogsListTemp;
-      this.pageList = pageList;
-    });
-  }
+class _ProfileScreenState extends State<ProfileScreen> {
+  String name = "";
+  String email = "";
 
   @override
   void initState() {
-    // getBlogsObject().then((blogsObject) {
-    //   setState(() {
-    //     print("NO");
-    //     List blogJSONList = blogsObject['blogList'];
-    //     blogJSONList.forEach((blog) {
-    //       print(blog);
-    //       blogsList.add(Text("YUOHOH"));
-    //       // blogsList.add(BlogCard(
-    //       //     title: blog['blogtitle'],
-    //       //     body: blog['blogbody'],
-    //       //     date: blog['date']));
-    //     });
-    //   }); //set
-    // });
+    // TODO: implement initState
 
-    // getBlogsObject().then((blogsObject) {
-    //   List<Widget> blogsListTemp = [];
-    //
-    //   //print("NO");
-    //   List blogJSONList = blogsObject['blogList'];
-    //   blogJSONList.forEach((blog) {
-    //     print("My man profile");
-    //     print(blog);
-    //     //blogList2.add(Text("YUOHOH"));
-    //     blogsListTemp.add(BlogCard(
-    //       title: blog['blogtitle'],
-    //       body: blog['blogbody'],
-    //       date: blog['date'],
-    //       blog_id: blog['_id'],
-    //     ));
-    //   });
-    //   setState(() {
-    //     blogsList.clear();
-    //     blogsList = blogsListTemp;
-    //   });
-    // });
-    print("1");
-    generateBlogsList(callbackUpdateBlogList, blogsPerPage: 5, page: 1);
-
-    print("2");
+    getUserRequest().then((resBody) {
+      setState(() {
+        name = jsonDecode(resBody)['data']['name'];
+        email = jsonDecode(resBody)['data']['email'];
+      });
+    });
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>....");
     return Scaffold(
-      appBar: generateAppBar(
-          "Profile Page - ${window.localStorage['name']}", context,
-          showBackButton: false),
-      body: Column(children: [
-        Expanded(
-          flex: 9,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(80, 40, 80, 40),
-            child: ListView(
-              children: blogsList,
+        appBar: generateAppBar("Profile Page", context),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              // width: 3 / 5 * constraints.maxWidth,
+              // height: 3 / 5 * constraints.maxHeight,
+              width: MediaQuery.of(context).size.width * 3 / 5,
+              height: MediaQuery.of(context).size.height * 3 / 5,
+              child: Card(
+                elevation: 35.0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    Divider(
+                      indent: 1 / 10 * MediaQuery.of(context).size.width,
+                      endIndent: 1 / 10 * MediaQuery.of(context).size.width,
+                    ),
+                    Text(
+                      email,
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    Divider(
+                      indent: 1 / 10 * MediaQuery.of(context).size.width,
+                      endIndent: 1 / 10 * MediaQuery.of(context).size.width,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/my-blogs');
+                            },
+                            child: Text("My Blogs")),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 30,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              // Navigator.pushNamed(context, '/my-blogs');
+                            },
+                            child: Text("Settings"))
+                      ],
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-        Expanded(flex: 1, child: pageList)
-      ]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/create-blog-post');
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
+            SizedBox(
+              width: double.infinity,
+            )
+          ],
+        ));
   }
 }

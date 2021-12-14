@@ -104,7 +104,7 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
                     if (resBody != "error") {
                       //postLoginSetup(resBody);
                       //Navigator.pop(context);
-                      Navigator.pushNamed(context, '/profile');
+                      Navigator.pushNamed(context, '/my-blogs');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Blog post unsuccessful')),

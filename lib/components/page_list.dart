@@ -6,14 +6,14 @@ class PageList extends StatelessWidget {
       {Key? key,
       required this.totalPages,
       required this.page,
-      required this.blogsPerPage,
-      required this.callbackUpdateBlogList})
+      required this.itemsPerPage,
+      required this.pageTap})
       : super(key: key);
 
   final int totalPages;
-  final int blogsPerPage;
+  final int itemsPerPage;
   final int page;
-  final Function callbackUpdateBlogList;
+  final Function pageTap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,7 @@ class PageList extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               ),
               onTap: () {
-                generateBlogsList(callbackUpdateBlogList,
-                    page: i, blogsPerPage: blogsPerPage);
+                pageTap(i);
                 //Navigator.pushNamed(context, '/login');
               },
             ),

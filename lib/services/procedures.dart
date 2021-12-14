@@ -4,7 +4,7 @@ import 'package:blog_frontend/components/user_card.dart';
 import 'package:blog_frontend/main.dart';
 import 'package:blog_frontend/services/networking.dart';
 import 'package:flutter/material.dart';
-import 'package:blog_frontend/screens/profile.dart';
+import 'package:blog_frontend/screens/user_blogs.dart';
 import 'package:blog_frontend/components/blog_card.dart';
 import 'package:blog_frontend/components/page_list.dart';
 
@@ -16,6 +16,7 @@ void postLoginSetup(String resBody) {
   window.localStorage['user_id'] = resObject['data']['user_id'];
   window.localStorage['token'] = resObject['data']['token'];
   window.localStorage['name'] = resObject['data']['name'];
+  //window.localStorage['isAdmin'] = resObject['data']['isAdmin'];
 }
 
 // getBlogsObject() async {
@@ -78,19 +79,24 @@ Future generateBlogsList(Function callbackUpdateBlogList,
   PageList tempPageList = PageList(
     totalPages: totalPages(blogsObject['data']['count'], blogsPerPage),
     page: page,
-    blogsPerPage: blogsPerPage,
-    callbackUpdateBlogList: callbackUpdateBlogList,
+    itemsPerPage: blogsPerPage,
+    pageTap: (int i) {
+      generateBlogsList(callbackUpdateBlogList,
+          page: i, blogsPerPage: blogsPerPage);
+    },
   );
   callbackUpdateBlogList(blogsListTemp, tempPageList);
 
   return blogsListTemp;
 }
 
-Future generateUsersList(Function callbackUpdateUsersList) async {
-  var blogJsonString = await getAllUsersRequest();
+Future generateUsersList(Function callbackUpdateUsersList,
+    {required int page, required int usersPerPage}) async {
+  var userJsonString =
+      await getAllUsersRequest(usersPerPage: usersPerPage, page: page);
   //print(blogJsonString);
-  print(blogJsonString);
-  var usersObject = jsonDecode(blogJsonString);
+  print(userJsonString);
+  var usersObject = jsonDecode(userJsonString);
 
   List<Widget> usersListTemp = [];
 
@@ -103,6 +109,8 @@ Future generateUsersList(Function callbackUpdateUsersList) async {
       user_id: "",
       style: TextStyle(fontWeight: FontWeight.bold),
       showButton: false,
+      usersPerPage: usersPerPage,
+      page: page,
       callbackUpdateUsersList: callbackUpdateUsersList));
   blogJSONList.forEach((user) {
     print(user);
@@ -112,9 +120,26 @@ Future generateUsersList(Function callbackUpdateUsersList) async {
       email: user['email'],
       date: user['date'],
       user_id: user['_id'],
+      usersPerPage: usersPerPage,
+      page: page,
       callbackUpdateUsersList: callbackUpdateUsersList,
     ));
   });
+  print("K");
+  print(totalPages(usersObject['data']['Users']['count'], usersPerPage));
+  print(usersObject['data']['Users']['count']);
+  print(usersPerPage);
+  PageList tempPageList = PageList(
+    totalPages: totalPages(usersObject['data']['Users']['count'], usersPerPage),
+    page: page,
+    itemsPerPage: usersPerPage,
+    pageTap: (int i) {
+      generateUsersList(callbackUpdateUsersList,
+          page: i, usersPerPage: usersPerPage);
+    },
+  );
+  print("Q");
+  callbackUpdateUsersList(usersListTemp, tempPageList);
 
   return usersListTemp;
 }
@@ -162,7 +187,7 @@ logoutProcedure() {
 int totalPages(blogCount, blogsPerPage) {
   // int blogCount = 26;
   int pages = 0;
-  int blogsPerPage = 5;
+  //int blogsPerPage = 5;
   List<Widget> pageList = [];
   pages = (blogCount / blogsPerPage).toInt();
 
@@ -171,4 +196,38 @@ int totalPages(blogCount, blogsPerPage) {
   }
 
   return pages;
+}
+
+Map<String, dynamic> parseJwt(String? token) {
+  final parts = token?.split('.');
+  if (parts?.length != 3) {
+    throw Exception('invalid token');
+  }
+
+  final payload = _decodeBase64(parts![1]);
+  final payloadMap = json.decode(payload);
+  if (payloadMap is! Map<String, dynamic>) {
+    throw Exception('invalid payload');
+  }
+
+  return payloadMap;
+}
+
+String _decodeBase64(String str) {
+  String output = str.replaceAll('-', '+').replaceAll('_', '/');
+
+  switch (output.length % 4) {
+    case 0:
+      break;
+    case 2:
+      output += '==';
+      break;
+    case 3:
+      output += '=';
+      break;
+    default:
+      throw Exception('Illegal base64url string!"');
+  }
+
+  return utf8.decode(base64Url.decode(output));
 }
