@@ -79,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         ElevatedButton(
                             onPressed: () {
-                              // Navigator.pushNamed(context, '/my-blogs');
+                              Navigator.pushNamed(context, '/settings');
                             },
                             child: Text("Settings"))
                       ],

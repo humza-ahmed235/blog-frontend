@@ -16,6 +16,7 @@ void postLoginSetup(String resBody) {
   window.localStorage['user_id'] = resObject['data']['user_id'];
   window.localStorage['token'] = resObject['data']['token'];
   window.localStorage['name'] = resObject['data']['name'];
+  window.localStorage['email'] = resObject['data']['user'];
   //window.localStorage['isAdmin'] = resObject['data']['isAdmin'];
 }
 

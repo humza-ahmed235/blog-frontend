@@ -204,6 +204,41 @@ Future<String> updateBlogRequest(
   }
 }
 
+Future<String> updateUserRequest(
+  String name,
+  String email,
+) async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+
+  try {
+    http.Response res = await http.put(
+      Uri.parse(baseurl + '/routes/profile/${window.localStorage['user_id']}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+        'Authorization': 'Bearer ${window.localStorage['token']}',
+      },
+      body: jsonEncode(<String?, String?>{
+        "name": name,
+        "email": email,
+      }),
+    );
+
+    if (res.statusCode == 200) {
+      return res.body;
+    } else if (res.statusCode == 401) {
+      logoutProcedure();
+      return res.body;
+    } else {
+      return "error";
+    }
+  } catch (err) {
+    print(err);
+    return "error";
+  }
+}
+
 Future<String> likeRequest(String? user_id, String? blog_id) async {
   //print("yo2");
   //'http://192.168.18.60:5000/';
