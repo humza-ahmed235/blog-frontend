@@ -1,6 +1,6 @@
 import 'package:blog_frontend/services/procedures.dart';
 import 'package:flutter/material.dart';
-import 'package:blog_frontend/services/networking.dart' as networking;
+import 'package:blog_frontend/services/networking.dart';
 import 'dart:html';
 import 'package:blog_frontend/components/my_appbar.dart';
 
@@ -102,12 +102,13 @@ class UserSettingsScreenState extends State<UserSettingsScreen> {
               ),
               SizedBox(
                 width: double.infinity,
+                height: MediaQuery.of(context).size.height / 16,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    String resBody = await networking.updateUserRequest(
+                    String resBody = await updateUserRequest(
                       nameController.text,
                       emailController.text,
                     );
@@ -145,6 +146,53 @@ class UserSettingsScreenState extends State<UserSettingsScreen> {
                   child: const Text('Update'),
                 ),
               ),
+              ElevatedButton(
+                  onPressed: () async {
+                    showDialog<void>(
+                      context: context,
+                      barrierDismissible: false, // user must tap button!
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Delete Account'),
+                          content: SingleChildScrollView(
+                            child: ListBody(
+                              children: const <Widget>[
+                                Text(
+                                    'Are you sure you want to delete your account?'),
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Delete'),
+                              onPressed: () async {
+                                var res = await deleteUser(
+                                    window.localStorage['user_id']);
+                                print(res);
+                                // generateUsersList(callbackUpdateUsersList,
+                                //     usersPerPage: this.usersPerPage,
+                                //     page: this.page);
+                                window.localStorage.clear();
+                                //Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Account Deleted')),
+                                );
+                                Navigator.pushNamed(context, '/login');
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('Cancel'),
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Text("Delete Account")),
             ],
           ),
         ),
