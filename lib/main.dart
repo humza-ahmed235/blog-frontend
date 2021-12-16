@@ -40,9 +40,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/login': (context) => isAuth() ? const ProfileScreen() : LoginScreen(),
+        '/login': (context) => isAuth() ? HomePageScreen() : LoginScreen(),
         // When navigating to the "/second" route, build the SecondScreen widget.
-        '/home': (context) => isAuth() ? MyHomePage() : LoginScreen(),
+        '/home': (context) => isAuth() ? HomePageScreen() : LoginScreen(),
         '/register': (context) => RegisterScreen(),
         '/my-blogs': (context) => isAuth() ? UserBlogsScreen() : LoginScreen(),
         '/profile': (context) => isAuth() ? ProfileScreen() : LoginScreen(),
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         '/settings': (context) =>
             isAuth() ? UserSettingsScreen() : LoginScreen(),
         '/admin/user-management': (context) =>
-            isAuth(admin: true) ? UserManagementScreen() : MyHomePage(),
+            isAuth(admin: true) ? UserManagementScreen() : HomePageScreen(),
       },
     );
   }

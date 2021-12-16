@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blog_frontend/components/blog_list.dart';
 import 'package:blog_frontend/components/my_appbar.dart';
 import 'package:blog_frontend/components/page_list.dart';
 import 'package:blog_frontend/constants.dart';
@@ -21,20 +22,6 @@ class UserBlogsScreen extends StatefulWidget {
 }
 
 class _UserBlogsScreenState extends State<UserBlogsScreen> {
-  List<Widget> blogsList = [Text("Loading")];
-  //List<Widget> pageList = [Text("Loading")];
-
-  Widget pageList = Text("Loading");
-  var blogsObject;
-
-  void callbackUpdateBlogList(List<Widget> blogsListTemp, Widget pageList) {
-    setState(() {
-      blogsList.clear();
-      this.blogsList = blogsListTemp;
-      this.pageList = pageList;
-    });
-  }
-
   @override
   void initState() {
     // getBlogsObject().then((blogsObject) {
@@ -73,10 +60,6 @@ class _UserBlogsScreenState extends State<UserBlogsScreen> {
     //     blogsList = blogsListTemp;
     //   });
     // });
-    print("1");
-    generateBlogsList(callbackUpdateBlogList, blogsPerPage: 6, page: 1);
-
-    print("2");
 
     super.initState();
   }
@@ -89,18 +72,10 @@ class _UserBlogsScreenState extends State<UserBlogsScreen> {
         "My Blogs",
         context,
       ),
-      body: Column(children: [
-        Expanded(
-          flex: 9,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(80, 40, 80, 40),
-            child: ListView(
-              children: blogsList,
-            ),
-          ),
-        ),
-        Expanded(flex: 1, child: pageList)
-      ]),
+      body: BlogList(
+        allBlogs: false,
+        user_id: window.localStorage['user_id']!,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, '/create-blog-post');

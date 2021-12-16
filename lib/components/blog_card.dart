@@ -14,9 +14,11 @@ class BlogCard extends StatefulWidget {
       required this.body,
       required this.date,
       required this.blog_id,
+      required this.user_id,
       required this.likes,
       required this.blogsPerPage,
       required this.page,
+      required this.allBlogs,
       required this.callbackUpdateBlogList})
       : super(key: key);
 
@@ -24,8 +26,10 @@ class BlogCard extends StatefulWidget {
   final String body;
   final String date;
   final String blog_id;
+  final String user_id;
   final int blogsPerPage;
   final int page;
+  final bool allBlogs;
   final Function callbackUpdateBlogList;
   String likes;
   IconData likeIcon = Icons.favorite_border;
@@ -226,7 +230,9 @@ class _BlogCardState extends State<BlogCard> {
                                     generateBlogsList(
                                         widget.callbackUpdateBlogList,
                                         blogsPerPage: widget.blogsPerPage,
-                                        page: widget.page);
+                                        page: widget.page,
+                                        allBlogs: widget.allBlogs,
+                                        user_id: widget.user_id);
 
                                     Navigator.of(context).pop();
                                   },

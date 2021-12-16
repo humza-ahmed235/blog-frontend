@@ -27,17 +27,37 @@ void postLoginSetup(String resBody) {
 //   return jsonDecode(blogJsonString);
 // }
 
-Future generateBlogsList(Function callbackUpdateBlogList,
-    {required int page, required int blogsPerPage}) async {
-  var blogJsonString = await getUserBlogsRequest(window.localStorage['user_id'],
-      blogsPerPage: blogsPerPage, page: page);
+Future generateBlogsList(
+  Function callbackUpdateBlogList, {
+  required int page,
+  required int blogsPerPage,
+  bool? allBlogs,
+  String user_id = "",
+}) async {
+  var blogJsonString;
+
+  if (allBlogs != null && !allBlogs) {
+    blogJsonString = await getUserBlogsRequest(user_id,
+        blogsPerPage: blogsPerPage, page: page);
+  } else {
+    blogJsonString =
+        await getAllBlogsRequest(blogsPerPage: blogsPerPage, page: page);
+  }
+
   //print(blogJsonString);
+  print("dd");
   print(blogJsonString);
   var blogsObject = jsonDecode(blogJsonString);
 
   List<Widget> blogsListTemp = [];
+  print(allBlogs);
+  print("k");
 
-  List blogJSONList = blogsObject['data']['blogList'];
+  List blogJSONList = allBlogs!
+      ? blogsObject['data']['newList']
+      : blogsObject['data']['blogList'];
+
+  print(blogJSONList);
   print("aa");
   print(blogJSONList);
 
@@ -46,7 +66,7 @@ Future generateBlogsList(Function callbackUpdateBlogList,
         page: page - 1, blogsPerPage: blogsPerPage);
     return;
   }
-
+  print("LL");
   if (blogJSONList.isEmpty && page == 1) {
     //generateBlogsList(callbackUpdateBlogList,
     //    page: page - 1, blogsPerPage: blogsPerPage);
@@ -64,12 +84,14 @@ Future generateBlogsList(Function callbackUpdateBlogList,
     //blogList2.add(Text("YUOHOH"));
     blogsListTemp.add(BlogCard(
       title: blog['blogtitle'],
-      body: blog['blogbody'],
+      body: "abc", //blog['blogbody'],
       date: blog['date'],
       blog_id: blog['_id'],
+      user_id: blog['user_id'],
       likes: blog['likes']['count'].toString(),
       blogsPerPage: blogsPerPage,
       page: page,
+      allBlogs: allBlogs,
       callbackUpdateBlogList: callbackUpdateBlogList,
     ));
   });
@@ -83,7 +105,10 @@ Future generateBlogsList(Function callbackUpdateBlogList,
     itemsPerPage: blogsPerPage,
     pageTap: (int i) {
       generateBlogsList(callbackUpdateBlogList,
-          page: i, blogsPerPage: blogsPerPage);
+          page: i,
+          blogsPerPage: blogsPerPage,
+          allBlogs: allBlogs,
+          user_id: user_id);
     },
   );
   callbackUpdateBlogList(blogsListTemp, tempPageList);

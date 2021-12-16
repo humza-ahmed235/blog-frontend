@@ -1,7 +1,9 @@
+import 'package:blog_frontend/components/blog_list.dart';
+import 'package:blog_frontend/components/my_appbar.dart';
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class HomePageScreen extends StatefulWidget {
+  HomePageScreen({Key? key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -13,10 +15,10 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageScreenState createState() => _HomePageScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -26,7 +28,16 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      body: Text("Home Page"),
+      appBar: generateAppBar("Home Page", context),
+      body: BlogList(
+        allBlogs: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/create-blog-post');
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

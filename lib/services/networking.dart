@@ -340,3 +340,29 @@ Future<String> getUserRequest() async {
     return "error";
   }
 }
+
+Future<String> getAllBlogsRequest(
+    {required int blogsPerPage, required int page}) async {
+  //print("yo2");
+  //'http://192.168.18.60:5000/';
+  http.Response res = await http.get(
+    Uri.parse(baseurl + '/routes/SuperAdmin/allBlogs/$blogsPerPage/$page'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      "Access-Control-Allow-Origin": "*",
+      'Authorization': 'Bearer ${window.localStorage['token']}',
+    },
+  );
+  print(res.body);
+
+  if (res.statusCode == 200 || res.statusCode == 400) {
+    return res.body;
+  }
+
+  if (res.statusCode == 401) {
+    logoutProcedure();
+    return res.body;
+  } else {
+    return "error";
+  }
+}

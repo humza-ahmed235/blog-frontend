@@ -96,7 +96,7 @@ class LoginScreenState extends State<LoginScreen> {
                     print("HELLO");
                     if (resBody != "error") {
                       postLoginSetup(resBody);
-                      Navigator.pushNamed(context, '/profile');
+                      Navigator.pushNamed(context, '/home');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Login Unsuccessful')),
