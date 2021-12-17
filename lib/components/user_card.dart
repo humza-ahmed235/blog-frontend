@@ -1,3 +1,5 @@
+import 'package:blog_frontend/components/blog_list.dart';
+import 'package:blog_frontend/components/my_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/services/networking.dart';
@@ -33,6 +35,27 @@ class UserCard extends StatelessWidget {
       Expanded(flex: 1, child: Text(this.name, style: style)),
       Expanded(flex: 1, child: Text(this.email, style: style)),
       Expanded(flex: 1, child: Text(this.date, style: style)),
+      Expanded(
+          child: Visibility(
+        visible: showButton,
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
+        child: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Scaffold(
+                          appBar:
+                              generateAppBar("${this.name}'s Blogs", context),
+                          body:
+                              BlogList(allBlogs: false, user_id: this.user_id),
+                        )),
+              );
+            },
+            icon: Icon(Icons.article)),
+      )),
       Expanded(
         child: Visibility(
           visible: showButton,
@@ -79,7 +102,7 @@ class UserCard extends StatelessWidget {
             },
           ),
         ),
-      )
+      ),
     ]));
   }
 }
