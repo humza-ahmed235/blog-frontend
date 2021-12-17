@@ -104,6 +104,9 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
                     if (resBody != "error") {
                       //postLoginSetup(resBody);
                       //Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Blog Posted')),
+                      );
                       Navigator.pushNamed(context, '/home');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

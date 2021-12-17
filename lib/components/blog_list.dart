@@ -25,6 +25,8 @@ class _BlogListState extends State<BlogList> {
   //List<Widget> pageList = [Text("Loading")];
 
   Widget pageList = Text("Loading");
+  final _scrollController = ScrollController(initialScrollOffset: 0.1);
+
   var blogsObject;
 
   @override
@@ -38,6 +40,14 @@ class _BlogListState extends State<BlogList> {
         user_id: widget.user_id);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _scrollController.dispose();
+    //_scrollController.initialScrollOffset =
+    super.dispose();
   }
 
   void callbackUpdateBlogList(List<Widget> blogsListTemp, Widget pageList) {
@@ -55,8 +65,15 @@ class _BlogListState extends State<BlogList> {
         flex: 9,
         child: Padding(
           padding: EdgeInsets.fromLTRB(80, 40, 80, 40),
-          child: ListView(
-            children: blogsList,
+          child: Scrollbar(
+            //interactive: true,
+            isAlwaysShown: true,
+            showTrackOnHover: true,
+            controller: _scrollController,
+            child: ListView(
+              controller: _scrollController,
+              children: blogsList,
+            ),
           ),
         ),
       ),

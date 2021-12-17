@@ -16,7 +16,9 @@ class BlogCard extends StatefulWidget {
       required this.date,
       required this.blog_id,
       required this.user_id,
+      required this.name,
       required this.likes,
+      required this.liked,
       required this.blogsPerPage,
       required this.page,
       required this.allBlogs,
@@ -28,12 +30,14 @@ class BlogCard extends StatefulWidget {
   final String date;
   final String blog_id;
   final String user_id;
+  final String name;
   final int blogsPerPage;
   final int page;
   final bool allBlogs;
   final Function callbackUpdateBlogList;
   String likes;
-  IconData likeIcon = Icons.favorite_border;
+  bool liked;
+  //IconData likeIcon = Icons.favorite_border;
 
   @override
   _BlogCardState createState() => _BlogCardState();
@@ -46,23 +50,23 @@ class _BlogCardState extends State<BlogCard> {
   @override
   void initState() {
     print("a1");
-    getBlog(widget.blog_id).then((resBody) {
-      print("a3");
-      //IconData newIcon = Icons.favorite_border;
-      //print()
-      if (jsonDecode(resBody)['data']['likes']['userlist']
-          .contains(window.localStorage['user_id'])) {
-        //newIcon = Icons.favorite;
-        setState(() {
-          widget.likeIcon = Icons.favorite;
-        });
-      } else {
-        setState(() {
-          widget.likeIcon = Icons.favorite_border;
-        });
-      }
-      print("a4");
-    });
+    // getBlog(widget.blog_id).then((resBody) {
+    //   print("a3");
+    //   //IconData newIcon = Icons.favorite_border;
+    //   //print()
+    //   if (jsonDecode(resBody)['data']['likes']['userlist']
+    //       .contains(window.localStorage['user_id'])) {
+    //     //newIcon = Icons.favorite;
+    //     setState(() {
+    //       widget.likeIcon = Icons.favorite;
+    //     });
+    //   } else {
+    //     setState(() {
+    //       widget.likeIcon = Icons.favorite_border;
+    //     });
+    //   }
+    //print("a4");
+    //});
 
     print("a2");
     super.initState();
@@ -109,7 +113,7 @@ class _BlogCardState extends State<BlogCard> {
                 Row(
                   children: [
                     Text(
-                      "By Hassan Ahmed".toUpperCase(),
+                      "By ${widget.name}".toUpperCase(),
                       style: TextStyle(
                         color: kDarkBlackColor,
                         fontSize: 12,
@@ -134,7 +138,9 @@ class _BlogCardState extends State<BlogCard> {
                   children: [
                     Spacer(),
                     IconButton(
-                      icon: Icon(widget.likeIcon),
+                      icon: Icon(widget.liked
+                          ? Icons.favorite
+                          : Icons.favorite_border),
                       onPressed: () async {
                         print("a");
                         String resBody = await likeRequest(
@@ -144,16 +150,17 @@ class _BlogCardState extends State<BlogCard> {
                         String likes = jsonDecode(resBody)['data']['Likes']
                                 ['count']
                             .toString();
-                        IconData newIcon = Icons.favorite_border;
+                        bool liked;
                         if (jsonDecode(resBody)['data']['Likes']['userlist']
                             .contains(window.localStorage['user_id'])) {
-                          newIcon = Icons.favorite;
+                          liked = true;
                         } else {
-                          newIcon = Icons.favorite_border;
+                          liked = false;
                         }
                         setState(() {
                           widget.likes = likes;
-                          widget.likeIcon = newIcon;
+                          //widget.likeIcon = newIcon;
+                          widget.liked = liked;
                         });
                       },
                     ),

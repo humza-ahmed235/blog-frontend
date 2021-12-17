@@ -146,6 +146,10 @@ class UserSettingsScreenState extends State<UserSettingsScreen> {
                   child: const Text('Update'),
                 ),
               ),
+              Divider(
+                indent: 1 / 10 * MediaQuery.of(context).size.width,
+                endIndent: 1 / 10 * MediaQuery.of(context).size.width,
+              ),
               ElevatedButton(
                   onPressed: () async {
                     showDialog<void>(

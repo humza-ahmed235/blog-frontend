@@ -114,6 +114,9 @@ class UpdateBlogPostScreenState extends State<UpdateBlogPostScreen> {
                     if (resBody != "error") {
                       //postLoginSetup(resBody);
                       //Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Blog Updated')),
+                      );
                       Navigator.pushNamed(context, '/profile');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

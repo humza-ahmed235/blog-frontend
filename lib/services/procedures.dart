@@ -84,11 +84,13 @@ Future generateBlogsList(
     //blogList2.add(Text("YUOHOH"));
     blogsListTemp.add(BlogCard(
       title: blog['blogtitle'],
-      body: "abc", //blog['blogbody'],
+      body: blog['blogbody'],
       date: blog['date'],
       blog_id: blog['_id'],
       user_id: blog['user_id'],
+      name: allBlogs ? blog['Uname'] : blogsObject['data']['Username'],
       likes: blog['likes']['count'].toString(),
+      liked: blog['likes']['userlist'].contains(window.localStorage['user_id']),
       blogsPerPage: blogsPerPage,
       page: page,
       allBlogs: allBlogs,
