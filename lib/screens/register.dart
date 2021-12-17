@@ -112,6 +112,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                     print(resBody);
                     if (resBody != "error") {
                       Navigator.pushNamed(context, '/login');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Account Created')),
+                      );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

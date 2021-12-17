@@ -117,7 +117,9 @@ class UpdateBlogPostScreenState extends State<UpdateBlogPostScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Blog Updated')),
                       );
-                      Navigator.pushNamed(context, '/profile');
+                      //Navigator.pushNamed(context, '/home');
+                      //Navigator.pop(context, true)
+                      Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

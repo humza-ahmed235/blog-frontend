@@ -177,7 +177,13 @@ class _BlogCardState extends State<BlogCard> {
                                   'blog_body': widget.body,
                                   'blog_id': widget.blog_id,
                                 },
-                              );
+                              ).then((value) {
+                                generateBlogsList(widget.callbackUpdateBlogList,
+                                    page: widget.page,
+                                    blogsPerPage: widget.blogsPerPage,
+                                    user_id: widget.user_id,
+                                    allBlogs: widget.allBlogs);
+                              });
                             },
                           )
                         : Container(),

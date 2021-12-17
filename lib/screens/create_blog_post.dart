@@ -107,7 +107,8 @@ class CreateBlogPostScreenState extends State<CreateBlogPostScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Blog Posted')),
                       );
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamed(context, '/my-blogs');
+                      //Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Blog post unsuccessful')),
