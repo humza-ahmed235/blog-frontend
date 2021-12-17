@@ -19,3 +19,12 @@ bool isAuth({bool admin = false}) {
 
   return true;
 }
+
+hasBlogRights(String user_id) {
+  if ((parseJwt(window.localStorage['token'])['isAdmin']) ||
+      window.localStorage['user_id'] == user_id) {
+    return true;
+  }
+
+  return false;
+}

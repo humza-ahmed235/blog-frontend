@@ -1,3 +1,4 @@
+import 'package:blog_frontend/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/components/my_appbar.dart';
 import 'package:blog_frontend/constants.dart';
@@ -89,24 +90,6 @@ class _BlogCardState extends State<BlogCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      "Organization Name".toUpperCase(),
-                      style: TextStyle(
-                        color: kDarkBlackColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(width: kDefaultPadding),
-                    Text(
-                      DateFormat("dd-MM-yyyy")
-                          .format(DateTime.parse(widget.date)),
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                  ],
-                ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: kDefaultPadding),
@@ -149,21 +132,6 @@ class _BlogCardState extends State<BlogCard> {
                 SizedBox(height: kDefaultPadding),
                 Row(
                   children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: Container(
-                        padding: EdgeInsets.only(bottom: kDefaultPadding / 4),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: kPrimaryColor, width: 3),
-                          ),
-                        ),
-                        child: Text(
-                          "Read More",
-                          style: TextStyle(color: kDarkBlackColor),
-                        ),
-                      ),
-                    ),
                     Spacer(),
                     IconButton(
                       icon: Icon(widget.likeIcon),
@@ -190,65 +158,71 @@ class _BlogCardState extends State<BlogCard> {
                       },
                     ),
                     Text(widget.likes),
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/update-blog-post',
-                          arguments: <String, String>{
-                            'blog_title': widget.title,
-                            'blog_body': widget.body,
-                            'blog_id': widget.blog_id,
-                          },
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () async {
-                        showDialog<void>(
-                          context: context,
-                          barrierDismissible: false, // user must tap button!
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Confirm Delete Blog'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: const <Widget>[
-                                    Text(
-                                        'Are you sure you want to delete this blog?'),
-                                  ],
-                                ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('Delete'),
-                                  onPressed: () async {
-                                    var res = await deleteBlog(widget.blog_id);
-                                    print(res);
-                                    generateBlogsList(
-                                        widget.callbackUpdateBlogList,
-                                        blogsPerPage: widget.blogsPerPage,
-                                        page: widget.page,
-                                        allBlogs: widget.allBlogs,
-                                        user_id: widget.user_id);
+                    hasBlogRights(widget.user_id)
+                        ? IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/update-blog-post',
+                                arguments: <String, String>{
+                                  'blog_title': widget.title,
+                                  'blog_body': widget.body,
+                                  'blog_id': widget.blog_id,
+                                },
+                              );
+                            },
+                          )
+                        : Container(),
+                    hasBlogRights(widget.user_id)
+                        ? IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () async {
+                              showDialog<void>(
+                                context: context,
+                                barrierDismissible:
+                                    false, // user must tap button!
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Confirm Delete Blog'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: const <Widget>[
+                                          Text(
+                                              'Are you sure you want to delete this blog?'),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text('Delete'),
+                                        onPressed: () async {
+                                          var res =
+                                              await deleteBlog(widget.blog_id);
+                                          print(res);
+                                          generateBlogsList(
+                                              widget.callbackUpdateBlogList,
+                                              blogsPerPage: widget.blogsPerPage,
+                                              page: widget.page,
+                                              allBlogs: widget.allBlogs,
+                                              user_id: widget.user_id);
 
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: const Text('Cancel'),
-                                  onPressed: () async {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text('Cancel'),
+                                        onPressed: () async {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          )
+                        : Container(),
                     // IconButton(
                     //   icon:
                     //       SvgPicture.asset("assets/icons/feather_share-2.svg"),
