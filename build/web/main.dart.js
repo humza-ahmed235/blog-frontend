@@ -15999,7 +15999,7 @@ Op:function(a){var s=0,r=P.S(t.N),q,p,o
 var $async$Op=P.O(function(b,c){if(b===1)return P.P(c,r)
 while(true)switch(s){case 0:p=t.N
 s=3
-return P.X(G.aeQ(P.dS("https://blog-backend-web.herokuapp.com"+("/routes/deleteuser/"+H.c(a))),P.ad(["Content-Type","application/json; charset=UTF-8","Access-Control-Allow-Origin","*","Authorization","Bearer "+H.c(window.localStorage.getItem("token"))],p,p)),$async$Op)
+return P.X(G.aeQ(P.dS("https://blog-backend-web.herokuapp.com"+("/routes/deleteuserWithBlogs/"+H.c(a))),P.ad(["Content-Type","application/json; charset=UTF-8","Access-Control-Allow-Origin","*","Authorization","Bearer "+H.c(window.localStorage.getItem("token"))],p,p)),$async$Op)
 case 3:o=c
 p=o.b
 if(p===200){q=B.cl(U.ck(o.e).c.a.h(0,"charset")).bc(0,o.x)

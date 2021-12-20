@@ -147,7 +147,7 @@ Future<String> deleteUser(String? user_id) async {
   //print("yo2");
   //'http://192.168.18.60:5000/';
   http.Response res = await http.delete(
-    Uri.parse(baseurl + '/routes/deleteuser/$user_id'),
+    Uri.parse(baseurl + '/routes/deleteuserWithBlogs/$user_id'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       "Access-Control-Allow-Origin": "*",
