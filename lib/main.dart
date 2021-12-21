@@ -52,8 +52,11 @@ class MyApp extends StatelessWidget {
             isAuth() ? UpdateBlogPostScreen() : LoginScreen(),
         '/settings': (context) =>
             isAuth() ? UserSettingsScreen() : LoginScreen(),
-        '/admin/user-management': (context) =>
-            isAuth(admin: true) ? UserManagementScreen() : HomePageScreen(),
+        '/admin/user-management': (context) => isAuth(admin: true)
+            ? UserManagementScreen()
+            : isAuth()
+                ? HomePageScreen()
+                : LoginScreen(),
       },
     );
   }
