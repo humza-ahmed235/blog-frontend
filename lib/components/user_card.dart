@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_frontend/services/networking.dart';
 import 'package:blog_frontend/services/procedures.dart';
+import 'dart:html';
 
 class UserCard extends StatelessWidget {
   const UserCard(
@@ -82,8 +83,14 @@ class UserCard extends StatelessWidget {
                       TextButton(
                         child: const Text('Delete'),
                         onPressed: () async {
-                          var res = await deleteUser(this.user_id);
+                          var res = await deleteUser(this.user_id, context);
                           print(res);
+
+                          if (this.user_id == window.localStorage['user_id']) {
+                            //window.localStorage.clear();
+                            logoutProcedure();
+                          }
+
                           generateUsersList(callbackUpdateUsersList,
                               usersPerPage: this.usersPerPage, page: this.page);
                           Navigator.of(context).pop();

@@ -1,4 +1,5 @@
 import 'package:blog_frontend/services/procedures.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:html';
@@ -143,7 +144,7 @@ Future<String> deleteBlog(String? blog_id) async {
   }
 }
 
-Future<String> deleteUser(String? user_id) async {
+Future<String> deleteUser(String? user_id, BuildContext context) async {
   //print("yo2");
   //'http://192.168.18.60:5000/';
   http.Response res = await http.delete(
@@ -158,6 +159,15 @@ Future<String> deleteUser(String? user_id) async {
   if (res.statusCode == 200) {
     return res.body;
   } else if (res.statusCode == 401) {
+    if (jsonDecode(res.body)['header']['code'] == 2) {
+      print(jsonDecode(res.body)['header']['code'].runtimeType);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(jsonDecode(res.body)['header']['message'])),
+      );
+
+      print("tooooooooooooooooo");
+      return "error";
+    }
     logoutProcedure();
     return res.body;
   } else {
@@ -207,6 +217,7 @@ Future<String> updateBlogRequest(
 Future<String> updateUserRequest(
   String name,
   String email,
+  String password,
 ) async {
   //print("yo2");
   //'http://192.168.18.60:5000/';
@@ -222,6 +233,7 @@ Future<String> updateUserRequest(
       body: jsonEncode(<String?, String?>{
         "name": name,
         "email": email,
+        "password": password
       }),
     );
 
